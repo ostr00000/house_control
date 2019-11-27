@@ -4,6 +4,7 @@ from house_control.device import Device
 from house_control.event import MyEvent
 from house_control.exceptions import LocationNotFound, DeviceNotFound, EventNotFound
 from house_control.location import Loc
+from house_control.process_language import baseProcessing, getBaseVerb, getNouns
 
 
 class Recognizer:
@@ -12,30 +13,21 @@ class Recognizer:
         self.currentLocation = currentLocation if currentLocation else location
 
     def recognise(self, command):
-        command = self._baseProcessing(command)
+        command = baseProcessing(command)
         eventType = self._getEventType(command)
         print(eventType)
 
         device = self._getDevice(command)
         print(device)
 
-    @staticmethod
-    def _baseProcessing(command: str):
-        return command.lower()
-
     def _getEventType(self, command) -> Type:
-        verb = self.getBaseVerb(command)
+        verb = getBaseVerb(command)
         for subclass in MyEvent.__subclasses__():  # type: Type[MyEvent]
             verbs = subclass.getVerbs()
             if verb in verbs:
                 return subclass
 
         return EventNotFound
-
-    @staticmethod
-    def getBaseVerb(command: str):
-        """Move verb to base form"""
-        return command.split(' ')[0] + 'yć'  # TODO
 
     def _getDevice(self, command: str) -> Device:
         loc = self.getLocation(command)
@@ -54,13 +46,6 @@ class Recognizer:
 
         return LocationNotFound
 
-    @staticmethod
-    def getNouns(command):
-        return [
-            command.split(' ')[1],
-            command.split(' ')[3] + 'a',
-        ]
-
     def getDeviceIfUnique(self, command):
         nouns = self.getNouns(command)
         founded = []
@@ -77,7 +62,7 @@ class Recognizer:
         return DeviceNotFound(*founded)
 
     def getDeviceFromLocation(self, command: str, loc: Loc):
-        nouns = self.getNouns(command)
+        nouns = getNouns(command)
 
         for device in loc.devices:
             for name in ([device.name] + device.aliases):
