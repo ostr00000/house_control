@@ -38,7 +38,7 @@ class Recognizer:
         return device
 
     def getLocation(self, command):
-        nouns = self.getNouns(command)
+        nouns = getNouns(command)
         for location in (self.currentLocation, self.location):
             for name in ([location.name] + location.aliases):
                 if name in nouns:
@@ -47,7 +47,7 @@ class Recognizer:
         return LocationNotFound
 
     def getDeviceIfUnique(self, command):
-        nouns = self.getNouns(command)
+        nouns = getNouns(command)
         founded = []
 
         for location in (self.currentLocation, self.location):
