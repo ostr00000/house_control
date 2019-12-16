@@ -1,0 +1,3 @@
+[submodule "data"]
+	path = data
+	url = https://github.com/ostr00000/jezyk-polski-slowniki
