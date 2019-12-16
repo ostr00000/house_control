@@ -1,6 +1,6 @@
-from house_control.device import Device
+from house_control.model.device import Device
 from house_control.event import SwitchEvent
-from house_control.location import Loc
+from house_control.model.location import Loc
 from house_control.recognizer import Recognizer
 
 

@@ -1,9 +1,9 @@
 from typing import Type
 
-from house_control.device import Device
+from house_control.model.device import Device
 from house_control.event import MyEvent
 from house_control.exceptions import LocationNotFound, DeviceNotFound, EventNotFound
-from house_control.location import Loc
+from house_control.model.location import Loc
 from house_control.process_language import baseProcessing, getBaseVerb, getNouns
 
 
@@ -40,7 +40,7 @@ class Recognizer:
     def getLocation(self, command):
         nouns = getNouns(command)
         for location in (self.currentLocation, self.location):
-            for name in ([location.name] + location.aliases):
+            for name in ([location.name] + list(location.aliases)):
                 if name in nouns:
                     return location
 

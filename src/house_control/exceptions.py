@@ -1,4 +1,4 @@
-from house_control.device import Device
+from house_control.model.device import Device
 
 
 class EventNotFound:
