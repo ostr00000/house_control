@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from typing import Dict, List, Iterator, Protocol, Set
+from typing import Dict, List, Iterator, Protocol, Set, Union, Type
 
 from house_control.config import DICTIONARY_FILE
 from house_control.model.location import Loc
@@ -13,16 +13,15 @@ class AliasObject(Protocol):
     aliases: Set[str]
 
 
+AliasAttribute = Union[AliasObject, Type[AliasObject]]
+
+
 class Model:
 
-    def __init__(self, *rootLocations: Loc):
-        self.rootLocations = rootLocations
-
+    def __init__(self):
         self.wordsDict: Dict[str, str] = {}
         self.reverseWordsDict: Dict[str, List[str]] = defaultdict(list)
-
         self.initWordDicts()
-        self.initModelAliases()
 
     def initWordDicts(self):
         with open(DICTIONARY_FILE) as dicFile:
@@ -44,20 +43,21 @@ class Model:
 
                 self.reverseWordsDict[baseWord] = words
 
-    def initModelAliases(self):
-        for rootLocation in self.rootLocations:
+    def initModelAliases(self, *rootLocations):
+        for rootLocation in rootLocations:
             for location in rootLocation:
                 self.updateAliases(location)
                 self.updateAliases(*location.devices)
 
-    def updateAliases(self, *aliasObjects: AliasObject):
+    def updateAliases(self, *aliasObjects: AliasAttribute):
         for aliasObject in aliasObjects:
             for otherAliases in self.aliasesGenerator(aliasObject):
                 aliasObject.aliases.update(otherAliases)
 
-    def aliasesGenerator(self, aliasObject: AliasObject) -> Iterator[List[str]]:
+    def aliasesGenerator(self, aliasObject: AliasAttribute) -> Iterator[List[str]]:
         names = set(aliasObject.aliases)
-        names.add(aliasObject.name)
+        if getattr(aliasObject, 'name', False):
+            names.add(aliasObject.name)
 
         for name in names:
             try:

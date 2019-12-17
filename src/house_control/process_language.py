@@ -1,5 +1,8 @@
-def baseProcessing(command: str):
-    return command.lower()
+from house_control.model.command import Command
+
+
+def baseProcessing(command: str) -> Command:
+    return Command(command.lower().split())
 
 
 def getBaseVerb(command: str):

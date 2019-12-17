@@ -5,7 +5,7 @@ from house_control.recognizer import Recognizer
 
 
 def main():
-    dom = Loc('dom', ['mieszkanie'])
+    dom = Loc('dom', {'mieszkanie'})
     k = Loc('kuchnia', parent=dom)
     lam = Device('lampa', k, ['światło'], [SwitchEvent])
 

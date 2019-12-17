@@ -1,7 +1,8 @@
 from typing import Type
 
 from house_control.model.device import Device
-from house_control.event import MyEvent
+from house_control.event import BaseHouseEvent
+from house_control.event.builder import HouseEventBuilder
 from house_control.exceptions import LocationNotFound, DeviceNotFound, EventNotFound
 from house_control.model.location import Loc
 from house_control.process_language import baseProcessing, getBaseVerb, getNouns
@@ -12,17 +13,20 @@ class Recognizer:
         self.location = location
         self.currentLocation = currentLocation if currentLocation else location
 
-    def recognise(self, command):
+    def recogniseEvent(self, command) -> BaseHouseEvent:
         command = baseProcessing(command)
-        eventType = self._getEventType(command)
-        print(eventType)
 
-        device = self._getDevice(command)
-        print(device)
+        builder = HouseEventBuilder()
+        builder.findType(command)
+        builder.findLocation(command, self.location)
+        builder.setCurrentLocation(self.currentLocation)
+        builder.findDevice(command)
+
+        return builder.build()
 
     def _getEventType(self, command) -> Type:
         verb = getBaseVerb(command)
-        for subclass in MyEvent.__subclasses__():  # type: Type[MyEvent]
+        for subclass in BaseHouseEvent.__subclasses__():  # type: Type[BaseHouseEvent]
             verbs = subclass.getVerbs()
             if verb in verbs:
                 return subclass
