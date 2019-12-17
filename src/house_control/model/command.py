@@ -1,11 +1,7 @@
-from dataclasses import dataclass
-from typing import List, Set
-
-
-@dataclass
 class Command:
-    sequence: List[str]
-    set: Set[str] = None
-
-    def __post_init__(self):
+    def __init__(self, commandText: str):
+        self.sequence = commandText.lower().split()
         self.set = set(self.sequence)
+
+    def __str__(self):
+        return ' '.join(self.sequence)

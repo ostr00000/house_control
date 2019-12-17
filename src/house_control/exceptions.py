@@ -1,17 +1,17 @@
-from house_control.model.device import Device
-
-
-class EventNotFound:
+class RecogniseException(Exception):
     pass
 
 
-class LocationNotFound:
-    pass
+class UnknownAction(RecogniseException):
+    def __str__(self):
+        return "Cannot recognize action"
 
 
-class DeviceNotFound:
-    def __init__(self, *maybeDevice: Device):
-        self.maybeDevice = maybeDevice
+class UnknownLocation(RecogniseException):
+    def __str__(self):
+        return "Cannot recognize location"
 
-    def __repr__(self):
-        return 'Maybe: ' + ','.join(d.name for d in self.maybeDevice)
+
+class UnknownDevice(RecogniseException):
+    def __str__(self):
+        return "Cannot recognize device"
