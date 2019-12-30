@@ -22,7 +22,6 @@ class Model:
         self.reverseWordsDict: Dict[str, List[str]] = defaultdict(list)
         self.initWordDicts()
         self.reverseWordsDict = dict(self.reverseWordsDict)
-        logger.info('Model loaded')
 
     def initWordDicts(self):
         with open(DICTIONARY_FILE) as dicFile:
