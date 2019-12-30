@@ -21,13 +21,13 @@ class Model:
         self.wordsDict: Dict[str, str] = {}
         self.reverseWordsDict: Dict[str, List[str]] = defaultdict(list)
         self.initWordDicts()
+        self.reverseWordsDict = dict(self.reverseWordsDict)
         logger.info('Model loaded')
 
     def initWordDicts(self):
         with open(DICTIONARY_FILE) as dicFile:
             for lineNum, line in enumerate(dicFile):  # type: (int, str)
-
-                words = list(filter(None, line.replace(',', ' ').lower().split()))
+                words = [w.strip() for w in line.split(',')]
                 try:
                     baseWord = words[0]
                 except KeyError:
@@ -60,14 +60,15 @@ class Model:
         if getattr(aliasObject, 'name', False):
             names.add(aliasObject.name)
 
-        for name in names:
-            try:
-                otherAliases = self.reverseWordsDict[name]
-            except KeyError:
+        for longName in names:
+            for name in longName.lower().split():
                 try:
-                    otherAliases = self.reverseWordsDict[self.wordsDict[name]]
+                    otherAliases = self.reverseWordsDict[name]
                 except KeyError:
-                    logger.error(f"Invalid configuration - cannot find word '{name}'")
-                    continue
+                    try:
+                        otherAliases = self.reverseWordsDict[self.wordsDict[name]]
+                    except KeyError:
+                        logger.error(f"Invalid configuration - cannot find word '{name}'")
+                        continue
 
-            yield otherAliases
+                yield otherAliases
