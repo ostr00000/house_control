@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Type, List, TYPE_CHECKING, Iterable
+from typing import Type, TYPE_CHECKING, Iterable
 
 from house_control.model import getModel
 
@@ -10,16 +10,22 @@ if TYPE_CHECKING:
 
 
 class Device:
-    def __init__(self, name: str, loc: Loc, aliases: Iterable[str] = (),
-                 defaultAction: Type[BaseHouseEvent] = None):
+    def __init__(self, name: str, loc: Loc,
+                 actions: Iterable[Type[BaseHouseEvent]] = (),
+                 defaultAction: Type[BaseHouseEvent] = None,
+                 aggr: Iterable[Device] = None,
+                 *aliases: Iterable[str]):
         self.name = name
         self.loc = loc
         self.defaultAction = defaultAction
+        self.aggr = list(aggr) if aggr else None
+        assert (self.aggr is None or any(all(isinstance(obj, k) for obj in self.aggr)
+                                         for k in type(self.aggr[0]).__mro__))
 
         self.aliases = set(aliases)
         self.initAliases()
 
-        self.actions: List[Type[BaseHouseEvent]] = []
+        self.actions = list(actions)
         self.initActions()
 
         self.addDeviceToParents()

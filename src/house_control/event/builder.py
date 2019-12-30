@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from itertools import chain
-from typing import Optional, Type, Dict, TypeVar
+from typing import Optional, Type, Dict, Iterable, TypeVar, List
 
 from house_control.event import BaseHouseEvent
 from house_control.exceptions import UnknownAction, UnknownDevice
@@ -10,6 +10,13 @@ from house_control.model.device import Device
 from house_control.model.location import Loc
 
 T = TypeVar('T')
+
+
+def multiMax(*iterable: Iterable[T], key=None) -> List[T]:
+    maxKey = max(*iterable, key=key)
+    maxVal = key(maxKey)
+    key = key if key else lambda x: x
+    return list(set(i for it in iterable for i in it if key(i) == maxVal))
 
 
 class HouseEventBuilder:
@@ -46,7 +53,8 @@ class HouseEventBuilder:
             for device in loc.devices:
                 intersected = self.command.set.intersection(device.aliases)
                 if intersected:
-                    self.deviceCandidates[device] = len(intersected)
+                    factor = 100 if loc == self.currentLocation else 0
+                    self.deviceCandidates[device] = len(intersected) + factor
 
         return self
 
@@ -75,7 +83,21 @@ class HouseEventBuilder:
 
     def extractDevice(self, eventType: Type[BaseHouseEvent]) -> Device:
         if self.deviceCandidates:
-            return max(self.deviceCandidates, key=self.deviceCandidates.get)
+            dev = {k: v for k, v in self.deviceCandidates.items() if eventType in k.actions}
+            if not dev:
+                dev = self.deviceCandidates
+
+            if len(dev) == 1:
+                return list(self.deviceCandidates.keys())[0]
+
+            maxValues = multiMax(self.deviceCandidates, key=self.deviceCandidates.get)
+            if len(maxValues) == 1:
+                return maxValues[0]
+
+            if any((aggr := m) for m in maxValues if m.aggr):
+                return aggr
+
+            return maxValues[0]
 
         if len(self.locationCandidates) == 1:
             loc = next(iter(self.locationCandidates))
