@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -18,3 +18,7 @@ class BaseHouseEvent(ABC):
 
     def __str__(self):
         return f"{type(self).__name__} for device '{self.device}'"
+
+    @abstractmethod
+    def __repr__(self):
+        raise NotImplementedError
