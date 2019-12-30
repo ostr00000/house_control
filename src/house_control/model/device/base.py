@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import field, dataclass
-from typing import Type, List, Set, TYPE_CHECKING, Optional
+from typing import Type, List, TYPE_CHECKING, Iterable
 
 from house_control.model import getModel
 
@@ -10,24 +9,32 @@ if TYPE_CHECKING:
     from house_control.model.location import Loc
 
 
-@dataclass
 class Device:
-    name: str
-    loc: Loc
-    aliases: Set[str] = field(default_factory=set)
-    actions: List[Type[BaseHouseEvent]] = field(default_factory=list)
-    defaultAction: Optional[Type[BaseHouseEvent]] = None
+    def __init__(self, name: str, loc: Loc, aliases: Iterable[str] = (),
+                 defaultAction: Type[BaseHouseEvent] = None):
+        self.name = name
+        self.loc = loc
+        self.defaultAction = defaultAction
 
-    def __post_init__(self):
+        self.aliases = set(aliases)
+        self.initAliases()
+
+        self.actions: List[Type[BaseHouseEvent]] = []
+        self.initActions()
+
+        self.addDeviceToParents()
+        getModel().updateAliases(self)
+
+    def addDeviceToParents(self):
         loc = self.loc
         while loc:
             loc.devices.append(self)
             loc = loc.parent
 
-        getModel().updateAliases(self)
-        self.initActions()
-
     def initActions(self):
+        pass
+
+    def initAliases(self):
         pass
 
     def __str__(self):
