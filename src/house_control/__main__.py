@@ -1,19 +1,18 @@
 import logging
 
-from house_control.model.device import Device
-from house_control.event import SwitchEvent
-from house_control.model.location import Loc
-from house_control.recognizer import Recognizer
+from house_control.exceptions import RecogniseException
 
 
 def main():
-    dom = Loc('dom', {'mieszkanie'})
-    k = Loc('kuchnia', parent=dom)
-    lam = Device('lampa', k, {'światło'}, [SwitchEvent])
+    from house_control.house_configuration import house
+    from house_control.recognizer import Recognizer
 
-    recognizer = Recognizer(dom, currentLocation=k)
-    event = recognizer.recognizeEvent("WŁĄCZ światlo w kuchni")
-    print(event)
+    rec = Recognizer(house)
+    try:
+        event = rec.recognizeEvent('włącz światło w kuchni')
+        print(event)
+    except RecogniseException as exc:
+        print(exc)
 
 
 if __name__ == '__main__':
