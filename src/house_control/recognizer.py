@@ -4,7 +4,6 @@ from house_control.event import BaseHouseEvent
 from house_control.event.builder import HouseEventBuilder
 from house_control.model.command import Command
 from house_control.model.location import Loc
-from house_control.process_language import baseProcessing
 
 
 class Recognizer:

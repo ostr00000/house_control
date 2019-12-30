@@ -25,6 +25,10 @@ class Device:
             loc = loc.parent
 
         getModel().updateAliases(self)
+        self.initActions()
+
+    def initActions(self):
+        pass
 
     def __str__(self):
         return f'{self.name} in [{self.loc}]'
