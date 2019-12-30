@@ -2,10 +2,10 @@ import pkgutil
 from house_control.event.base import BaseHouseEvent
 
 
-def _importModules():
-    for loader, module_name, is_pkg in pkgutil.walk_packages(__path__):
-        _module = loader.find_module(module_name).load_module(module_name)
-        globals()[module_name] = _module
+def _importAllModules():
+    for loader, module_name, is_pkg in pkgutil.walk_packages(
+            __path__, prefix='house_control.event.'):
+        __import__(module_name)
 
 
 def _initEvents():
@@ -13,5 +13,5 @@ def _initEvents():
     getModel().updateAliases(*BaseHouseEvent.__subclasses__())
 
 
-_importModules()
+_importAllModules()
 _initEvents()

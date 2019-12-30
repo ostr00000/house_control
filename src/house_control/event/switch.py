@@ -5,7 +5,8 @@ class SwitchEvent(BaseHouseEvent):
     aliases = {'włącz', 'wyłącz'}
 
     def __repr__(self):
-        return 'toggle'
+        return 'on'
+        return 'off'
 
 
 
