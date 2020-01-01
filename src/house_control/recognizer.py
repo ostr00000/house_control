@@ -1,7 +1,8 @@
-from typing import Union
+from typing import Union, Optional
 
 from house_control.event import BaseHouseEvent
 from house_control.event.builder import HouseEventBuilder
+from house_control.exceptions import RecogniseException
 from house_control.model.command import Command
 from house_control.model.location import Loc
 
@@ -15,7 +16,7 @@ class Recognizer:
         """Send speak to external service"""
         raise NotImplementedError
 
-    def recognizeEvent(self, command: Union[str, Command]) -> BaseHouseEvent:
+    def recognizeEvent(self, command: Union[str, Command], raiseException=False) -> BaseHouseEvent:
         if not isinstance(command, Command):
             if isinstance(command, str):
                 command = Command(command)
@@ -29,3 +30,9 @@ class Recognizer:
         builder.findDevice()
 
         return builder.build()
+
+    def recognizeOptionalEvent(self, command: Union[str, Command]) -> Optional[BaseHouseEvent]:
+        try:
+            return self.recognizeEvent(command)
+        except RecogniseException:
+            return None
