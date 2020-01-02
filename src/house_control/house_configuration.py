@@ -7,8 +7,8 @@ lamps = []
 house = Loc('dom')
 
 attic = Loc('poddasze', parent=house)
-atticP1 = Loc('cześć pierwsza', parent=attic)
-atticP2 = Loc('cześć druga', parent=attic)
+atticP1 = Loc('cześć pierwsza na poddaszu', parent=attic)
+atticP2 = Loc('cześć druga na poddaszu', parent=attic)
 bedroom = Loc('sypialnia', parent=house)
 bathroom = Loc('łazienka', parent=house)
 livingRoom = Loc('salon', parent=house)
@@ -26,7 +26,6 @@ Monitor('monitor', curLoc)
 
 # ################ attic part 2 ################
 curLoc = atticP2
-incCodeNameLetter()
 lamps.extend([
     Light('oświetlenie górne', curLoc),
     Light('lampa nad ławą', curLoc),

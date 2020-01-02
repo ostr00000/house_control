@@ -32,14 +32,8 @@ class Device:
         self.actions = list(actions)
         self.initActions()
 
-        self.addDeviceToParents()
+        loc.devices.append(self)
         getModel().updateDevices(self)
-
-    def addDeviceToParents(self):
-        loc = self.loc
-        while loc:
-            loc.devices.append(self)
-            loc = loc.parent
 
     def initActions(self):
         pass

@@ -48,7 +48,9 @@ class Model:
                 self.updateDevices(*location.devices)
 
     def updateLocation(self, location: Loc):
-        for newAliases in self.aliasesGenerator(location.aliases):
+        names = set(location.aliases)
+        names.add(location.name)
+        for newAliases in self.aliasesGenerator(names):
             location.aliases.update(newAliases)
 
     def updateDevices(self, *devices: Device):

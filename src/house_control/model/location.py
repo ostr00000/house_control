@@ -29,8 +29,23 @@ class Loc:
     def __iter__(self):
         yield self
         for child in self.children:
-            yield child
             yield from child
 
     def __hash__(self):
         return hash((self.name, frozenset(self.aliases)))
+
+    def __contains__(self, item):
+        assert isinstance(item, Loc)
+        while item:
+            if item == self:
+                return True
+            item = item.parent
+        return False
+
+    def deep(self):
+        cur = self
+        counter = 1
+        while cur.parent:
+            counter += 1
+            cur = cur.parent
+        return counter

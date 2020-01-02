@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from itertools import chain
 from typing import Optional, Type, Dict, Iterable, TypeVar, List
 
@@ -9,6 +10,7 @@ from house_control.model.command import Command
 from house_control.model.device import Device
 from house_control.model.location import Loc
 
+logger = logging.getLogger(__name__)
 T = TypeVar('T')
 
 
@@ -49,12 +51,19 @@ class HouseEventBuilder:
         return self
 
     def findDevice(self) -> HouseEventBuilder:
-        for loc in chain(self.locationCandidates.keys(), (self.currentLocation,)):
+        cur = self.currentLocation if self.currentLocation else {}
+
+        mostPossibleLoc = set(self.locationCandidates.keys())
+        mostPossibleLoc.add(self.currentLocation)
+        for loc in mostPossibleLoc:
+            deep = loc.deep()
+            isInCurLocation = loc in cur
+            possibleLocation = self.locationCandidates.get(loc, 0)
             for device in loc.devices:
                 intersected = self.command.set.intersection(device.aliases)
                 if intersected:
-                    factor = 100 if loc == self.currentLocation else 0
-                    self.deviceCandidates[device] = len(intersected) + factor
+                    val = (+ 1 * deep + 10 * isInCurLocation + 100 * len(intersected) + 100 * possibleLocation)
+                    self.deviceCandidates[device] = val
 
         return self
 
@@ -94,6 +103,7 @@ class HouseEventBuilder:
             if len(maxValues) == 1:
                 return maxValues[0]
 
+            filtered = list(filter(lambda x: x.aggr is not None, maxValues))  # DEBUG
             if any((aggr := m) for m in maxValues if m.aggr):
                 return aggr
 

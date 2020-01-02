@@ -1,12 +1,14 @@
+import logging
+from random import seed
 from typing import Iterator, Tuple
 
 import xlrd
 
 from house_control.house_configuration import house
 from house_control.recognizer import Recognizer
-import logging
 
 logger = logging.getLogger(__name__)
+seed(123)
 
 
 def xlsTestGenerator() -> Iterator[Tuple[str, str]]:
@@ -33,11 +35,12 @@ def testFromXls():
         event = rec.recognizeOptionalEvent(command)
         if event is not None:
             nonEmpty += 1
-            rec.recognizeOptionalEvent(command)
+
         logger.info(
             f"Recognized: {str(event).ljust(30)} : "
-            f"Expected: {symbol.ljust(15)} : " 
+            f"Expected: {symbol.ljust(15)} : "
             f"{repr(event).ljust(30)} : "
         )
+        rec.recognizeOptionalEvent(command)
 
     logger.info(f"Non empty results {nonEmpty}/{total}")
