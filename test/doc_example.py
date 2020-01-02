@@ -34,6 +34,10 @@ def testFromXls():
         if event is not None:
             nonEmpty += 1
             rec.recognizeOptionalEvent(command)
-        logger.info(f"Recognized: {repr(event).ljust(30)} : Expected: {symbol}")
+        logger.info(
+            f"Recognized: {str(event).ljust(30)} : "
+            f"Expected: {symbol.ljust(15)} : " 
+            f"{repr(event).ljust(30)} : "
+        )
 
     logger.info(f"Non empty results {nonEmpty}/{total}")

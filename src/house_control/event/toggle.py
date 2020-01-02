@@ -5,5 +5,5 @@ from house_control.event.base import AliasSet
 class ToggleEvent(BaseHouseEvent):
     aliases = AliasSet('przełącz')
 
-    def __repr__(self):
+    def __str__(self):
         return 'toggle'

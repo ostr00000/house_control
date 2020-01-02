@@ -5,7 +5,7 @@ from house_control.event.base import AliasSet
 class ChannelEvent(BaseHouseEvent):
     aliases = AliasSet('kanał', 'poprzedni', 'następny')
 
-    def __repr__(self):
+    def __str__(self):
         return 'set <DEV> ch <N>'
         return 'ch_next <DEV>'
         return 'ch_prev <DEV>'

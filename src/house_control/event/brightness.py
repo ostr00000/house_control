@@ -5,5 +5,5 @@ from house_control.event.base import AliasSet
 class BrightnessEvent(BaseHouseEvent):
     aliases = AliasSet('jasność')
 
-    def __repr__(self):
+    def __str__(self):
         return 'set <DEV> bright <N>'

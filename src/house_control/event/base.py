@@ -47,9 +47,9 @@ class BaseHouseEvent(ABC):
         self.device = device
         self.command = command
 
-    def __str__(self):
-        return f"{type(self).__name__} for device '{self.device}'"
+    def __repr__(self):
+        return f"{type(self).__name__} for device '{repr(self.device)}'"
 
     @abstractmethod
-    def __repr__(self):
+    def __str__(self):
         raise NotImplementedError

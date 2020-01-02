@@ -5,5 +5,5 @@ from house_control.event.base import AliasSet
 class TimeEvent(BaseHouseEvent):
     aliases = AliasSet('ustaw')
 
-    def __repr__(self):
+    def __str__(self):
         return 'set <DEV> time <gg:mm>'

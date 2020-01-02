@@ -5,6 +5,6 @@ from house_control.event.base import AliasSet
 class ColorEvent(BaseHouseEvent):
     aliases = AliasSet('ciepły', 'zimny')
 
-    def __repr__(self):
+    def __str__(self):
         return 'cold <DEV>'
         return 'warm <DEV>'

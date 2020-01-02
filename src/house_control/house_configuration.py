@@ -1,3 +1,4 @@
+from house_control.model.device.code_name import incCodeNameLetter
 from house_control.model.device.impl import Computer, Monitor, Light, ColorLight, BrightnessLight, \
     Fan, SpeedFan, Blower, Radio, TV, AlarClock, Shutter
 from house_control.model.location import Loc
@@ -25,6 +26,7 @@ Monitor('monitor', curLoc)
 
 # ################ attic part 2 ################
 curLoc = atticP2
+incCodeNameLetter()
 lamps.extend([
     Light('oświetlenie górne', curLoc),
     Light('lampa nad ławą', curLoc),
@@ -39,6 +41,7 @@ lamps.clear()
 
 # ################ bedroom ################
 curLoc = bedroom
+incCodeNameLetter()
 lamps.extend([
     ColorLight('oświetlenie górne', curLoc),
     Light('lampa lewa', curLoc),
@@ -54,6 +57,7 @@ lamps.clear()
 
 # ################ bathroom ################
 curLoc = bathroom
+incCodeNameLetter()
 lamps.extend([
     Light('oświetlenie górne', curLoc),
     Light('lampa nad lustrem', curLoc),
@@ -65,6 +69,7 @@ lamps.clear()
 
 # ################ livingRoom ################
 curLoc = livingRoom
+incCodeNameLetter()
 lamps.extend([
     Light('oświetlenie górne', curLoc),
     ColorLight('lampa lewa', curLoc),
@@ -78,6 +83,7 @@ Shutter('Rolety razem', curLoc, aggr=[s0, s1])
 
 # ################ kitchen ################
 curLoc = kitchen
+incCodeNameLetter()
 lamps.extend([
     Light('oświetlenie górne', curLoc),
     BrightnessLight('oświetlenie nad szafkami', curLoc),
