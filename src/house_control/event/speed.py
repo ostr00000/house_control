@@ -6,5 +6,7 @@ class SpeedEvent(BaseHouseEvent):
     aliases = AliasSet('szybciej', 'wolniej')
 
     def __str__(self):
-        return 'fast <DEV>'
-        return 'slow <DEV>'
+        return f"{'fast' if self.isFast() else 'slow'} {self.device}"
+
+    def isFast(self):
+        pass

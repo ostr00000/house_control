@@ -6,6 +6,14 @@ class ChannelEvent(BaseHouseEvent):
     aliases = AliasSet('kanał', 'poprzedni', 'następny')
 
     def __str__(self):
-        return 'set <DEV> ch <N>'
-        return 'ch_next <DEV>'
-        return 'ch_prev <DEV>'
+        channel = self.getChannel()
+        if channel:
+            return f'set {self.device} ch {channel}'
+
+        return f"{'ch_next' if self.isNext() else 'ch_prev'} {self.device}"
+
+    def getChannel(self) -> int:
+        pass
+
+    def isNext(self):
+        pass

@@ -6,4 +6,7 @@ class TimeEvent(BaseHouseEvent):
     aliases = AliasSet('ustaw')
 
     def __str__(self):
-        return 'set <DEV> time <gg:mm>'
+        return f"set {self.device} time {self.getTime()}"
+
+    def getTime(self):
+        return '<gg:mm>'

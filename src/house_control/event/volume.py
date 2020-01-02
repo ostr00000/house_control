@@ -3,9 +3,17 @@ from house_control.event.base import AliasSet
 
 
 class VolumeEvent(BaseHouseEvent):
-    aliases = AliasSet('głośniej', 'ciszej', 'podgłośnić', 'ściszyć')
+    aliases = AliasSet('głośniej', 'ciszej', 'pogłośnić', 'ściszyć')
 
     def __str__(self):
-        return 'set <DEV> vol <N>'
-        return 'vol_up <N>'
-        return 'vol_down <N>'
+        vol = self.getVolume()
+        if vol:
+            return f"set {self.device} vol {vol}"
+
+        return f"{'vol_up' if self.isVolumeUp() else 'vol_down'} {self.device}"
+
+    def getVolume(self) -> int:
+        pass
+
+    def isVolumeUp(self):
+        pass

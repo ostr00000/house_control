@@ -6,4 +6,7 @@ class BrightnessEvent(BaseHouseEvent):
     aliases = AliasSet('jasność')
 
     def __str__(self):
-        return 'set <DEV> bright <N>'
+        return f'set {self.device} bright {self.getBrightness()}'
+
+    def getBrightness(self):
+        pass

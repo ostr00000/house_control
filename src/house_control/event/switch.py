@@ -10,8 +10,8 @@ class SwitchEvent(BaseHouseEvent):
     def __init__(self, device: Device, command: Command):
         super().__init__(device, command)
 
-    def isOn(self):
-        return any(elem in self.command.set for elem in self.aliases.getGroup(0))
-
     def __str__(self):
         return f"{'on' if self.isOn() else 'off'} {self.device}"
+
+    def isOn(self):
+        return any(elem in self.command.set for elem in self.aliases.getGroup(0))

@@ -6,4 +6,4 @@ class ToggleEvent(BaseHouseEvent):
     aliases = AliasSet('przełącz')
 
     def __str__(self):
-        return 'toggle'
+        return f"toggle {self.device}"

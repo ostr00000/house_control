@@ -6,6 +6,17 @@ class VerticalEvent(BaseHouseEvent):
     aliases = AliasSet('dół', 'góra', 'stop')
 
     def __str__(self):
-        return 'up <DEV>'
-        return 'down <DEV>'
-        return 'stop <DEV>'
+        if self.isUp():
+            action = 'up'
+        elif self.isDown():
+            action = 'down'
+        else:
+            action = 'stop'
+
+        return f"{action} {self.device}"
+
+    def isUp(self):
+        pass
+
+    def isDown(self):
+        pass
