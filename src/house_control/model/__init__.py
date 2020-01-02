@@ -23,7 +23,7 @@ class _ModelWrapper:
         self._model = None
 
     @property
-    def model(self):
+    def model(self) -> _Model:
         if self._model is None:
             try:
                 self._load()

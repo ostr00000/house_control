@@ -1,18 +1,16 @@
+from __future__ import annotations
 import logging
 from collections import defaultdict
-from typing import Dict, List, Iterator, Protocol, Set, Union, Type
+from typing import Dict, List, Set, TYPE_CHECKING, Iterable
 
 from house_control.config import DICTIONARY_FILE
 
+if TYPE_CHECKING:
+    from house_control.model.location import Loc
+    from house_control.model.device import Device
+    from house_control.event import BaseHouseEvent
+
 logger = logging.getLogger(__name__)
-
-
-class AliasObject(Protocol):
-    name: str
-    aliases: Set[str]
-
-
-AliasAttribute = Union[AliasObject, Type[AliasObject]]
 
 
 class Model:
@@ -46,20 +44,26 @@ class Model:
     def initModelAliases(self, *rootLocations):
         for rootLocation in rootLocations:
             for location in rootLocation:
-                self.updateAliases(location)
-                self.updateAliases(*location.devices)
+                self.updateLocation(location)
+                self.updateDevices(*location.devices)
 
-    def updateAliases(self, *aliasObjects: AliasAttribute):
-        for aliasObject in aliasObjects:
-            for otherAliases in self.aliasesGenerator(aliasObject):
-                aliasObject.aliases.update(otherAliases)
+    def updateLocation(self, location: Loc):
+        for newAliases in self.aliasesGenerator(location.aliases):
+            location.aliases.update(newAliases)
 
-    def aliasesGenerator(self, aliasObject: AliasAttribute) -> Iterator[List[str]]:
-        names = set(aliasObject.aliases)
-        if getattr(aliasObject, 'name', False):
-            names.add(aliasObject.name)
+    def updateDevices(self, *devices: Device):
+        for dev in devices:
+            for newAliases in self.aliasesGenerator(dev.aliases):
+                dev.aliases.update(newAliases)
 
-        for longName in names:
+    def updateEvent(self, event: BaseHouseEvent):
+        for key, names in event.aliases.iterOverGroup():
+            newAliases = self.aliasesGenerator(names)
+            for newAlias in newAliases:
+                event.aliases.addAliases(key, newAlias)
+
+    def aliasesGenerator(self, names: Set[str]) -> Iterable[List[str]]:
+        for longName in set(names):
             for name in longName.lower().split():
                 try:
                     otherAliases = self.reverseWordsDict[name]

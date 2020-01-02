@@ -1,8 +1,9 @@
 from house_control.event import BaseHouseEvent
+from house_control.event.base import AliasSet
 
 
 class SpeedEvent(BaseHouseEvent):
-    aliases = {'szybciej', 'wolniej'}
+    aliases = AliasSet('szybciej', 'wolniej')
 
     def __repr__(self):
         return 'fast <DEV>'

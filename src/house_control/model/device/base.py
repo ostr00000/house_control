@@ -29,7 +29,7 @@ class Device:
         self.initActions()
 
         self.addDeviceToParents()
-        getModel().updateAliases(self)
+        getModel().updateDevices(self)
 
     def addDeviceToParents(self):
         loc = self.loc

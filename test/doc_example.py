@@ -19,7 +19,7 @@ def xlsTestGenerator() -> Iterator[Tuple[str, str]]:
 
 
 def testFromXls():
-    """Non empty results 91/214"""
+    """Non empty results 115/214"""
     rec = Recognizer(house)
 
     total = 0

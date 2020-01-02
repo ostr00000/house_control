@@ -21,7 +21,7 @@ class Loc:
         if self.parent:
             self.parent.children.append(self)
 
-        getModel().updateAliases(self)
+        getModel().updateLocation(self)
 
     def __str__(self):
         return f'{self.name} in [{self.parent}]' if self.parent else self.name

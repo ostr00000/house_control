@@ -11,8 +11,10 @@ def _importAllModules():
 
 def _initEvents():
     from house_control.model import getModel
-    getModel().updateAliases(*BaseHouseEvent.__subclasses__())
-
+    model = getModel()
+    for event in BaseHouseEvent.__subclasses__():
+        model.updateEvent(event)
+    
 
 _importAllModules()
 _initEvents()
