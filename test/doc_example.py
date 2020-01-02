@@ -4,6 +4,9 @@ import xlrd
 
 from house_control.house_configuration import house
 from house_control.recognizer import Recognizer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def xlsTestGenerator() -> Iterator[Tuple[str, str]]:
@@ -16,17 +19,21 @@ def xlsTestGenerator() -> Iterator[Tuple[str, str]]:
 
 
 def testFromXls():
-    """Non empty results 91/215"""
+    """Non empty results 91/214"""
     rec = Recognizer(house)
 
     total = 0
     nonEmpty = 0
-    for command, symbol in xlsTestGenerator():
+    gen = xlsTestGenerator()
+    header = next(gen)
+    logger.info(f'{" " * 12}{header[0].ljust(30)} : {header[1]}')
+
+    for command, symbol in gen:
         total += 1
         event = rec.recognizeOptionalEvent(command)
         if event is not None:
             nonEmpty += 1
-        print(f"Recognized: {repr(event).ljust(20)}, Expected: {symbol}")
+            rec.recognizeOptionalEvent(command)
+        logger.info(f"Recognized: {repr(event).ljust(30)} : Expected: {symbol}")
 
-    print(f"Non empty results {nonEmpty}/{total}")
-    print("OK")
+    logger.info(f"Non empty results {nonEmpty}/{total}")
