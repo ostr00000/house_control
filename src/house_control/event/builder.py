@@ -83,7 +83,16 @@ class HouseEventBuilder:
 
     def extractType(self) -> Type[BaseHouseEvent]:
         if self.typeCandidates:
-            return max(self.typeCandidates, key=self.typeCandidates.get)
+            possibleTypes = set(chain(*(dev.actions for dev in self.deviceCandidates.keys())))
+            validTypeCandidates = {tc: val for tc, val in self.typeCandidates.items()
+                                   if tc in possibleTypes}
+            if validTypeCandidates:
+                if len(validTypeCandidates) == 1:
+                    return next(iter(validTypeCandidates.keys()))
+                best = max(validTypeCandidates, key=validTypeCandidates.get)
+            else:
+                best = max(self.typeCandidates, key=self.typeCandidates.get)
+            return best
 
         dev = self.extractDevice()
         if dev.defaultAction:

@@ -29,6 +29,7 @@ class AliasSet(set):
             self._data[key] = val
 
     def getGroup(self, n: int):
+        assert n <= len(self._data), f'Invalid group {n} - max group {len(self._data)}'
         return next(islice(self._data.values(), n, None))
 
     def iterOverGroup(self) -> ItemsView[str, Set[str]]:
@@ -53,3 +54,6 @@ class BaseHouseEvent(ABC):
     @abstractmethod
     def __str__(self):
         raise NotImplementedError
+
+    def isInGroup(self, groupNumber: int):
+        return any(elem in self.command.set for elem in self.aliases.getGroup(groupNumber))
