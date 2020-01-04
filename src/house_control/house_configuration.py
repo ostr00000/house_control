@@ -6,8 +6,8 @@ from house_control.model.location import Loc
 house = Loc('dom')
 
 attic = Loc('poddasze', parent=house)
-atticP1 = Loc('cześć pierwsza na poddaszu', parent=attic)
-atticP2 = Loc('cześć druga na poddaszu', parent=attic)
+atticP1 = Loc('część pierwsza na poddaszu', parent=attic)
+atticP2 = Loc('część druga na poddaszu', parent=attic)
 bedroom = Loc('sypialnia', parent=house)
 bathroom = Loc('łazienka', parent=house)
 livingRoom = Loc('salon', parent=house)
@@ -30,23 +30,22 @@ lamps.extend([
     Light('lampa nad ławą', curLoc),
     Light('lampa lewa', curLoc),
     Light('lampa prawa', curLoc),
-    Light('lampa', curLoc),
 ])
 TV('telewizor', curLoc)
-lamps.append(Light('oświetlenie za telewizorem', curLoc))
+lamps.append(Light('oświetlenie za telewizorem', curLoc, requiredNames='oświetlenie'))
 Light('całe oświetlenie na poddaszu', curLoc, aggr=lamps)
 
 # ################ bedroom ################
 curLoc = bedroom
 incCodeNameLetter()
 lamps = [
-    ColorLight('oświetlenie górne', curLoc),
-    Light('lampa lewa', curLoc),
-    Light('lampa prawa', curLoc),
-    Light('lampa', curLoc),
-    Light('oświetlenie za telewizorem', curLoc),
+    ColorLight('oświetlenie górne', curLoc, 'oświetlenie główne'),
+    Light('lampa lewa', curLoc, requiredNames='lewa'),
+    Light('lampa prawa', curLoc, requiredNames='prawa'),
+    Light('lampa', curLoc, requiredNames=('!prawa', '!lewa')),
 ]
 TV('telewizor', curLoc)
+lamps.append(Light('oświetlenie za telewizorem', curLoc, requiredNames='oświetlenie'))
 Light('całe oświetlenie w sypialni', curLoc, aggr=lamps)
 AlarClock('budzik', curLoc)
 

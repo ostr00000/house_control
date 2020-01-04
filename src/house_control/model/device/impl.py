@@ -36,6 +36,10 @@ class Light(SwitchDevice):
 
 
 class ColorLight(Light):
+    def initAliases(self):
+        super().initAliases()
+        self.aliases.add('kolor')
+
     def initActions(self):
         super().initActions()
         self.actions.append(ColorEvent)
@@ -59,8 +63,9 @@ class SpeedFan(Fan):
         self.actions.append(SpeedEvent)
 
 
-class Blower(SwitchDevice):
-    pass
+class Blower(Device):
+    def initActions(self):
+        self.actions.append(SwitchEvent)
 
 
 class Radio(SwitchDevice):
@@ -76,7 +81,7 @@ class Radio(SwitchDevice):
 
 class TV(Radio):
     def initAliases(self):
-        super().initAliases()
+        SwitchDevice.initAliases(self)
         self.aliases.add('telewizor')
         self.aliases.add('TV')
 
@@ -91,6 +96,7 @@ class AlarClock(Device):
     def initAliases(self):
         super().initAliases()
         self.aliases.add('budzik')
+        self.aliases.add('budzenie')
 
 
 class Shutter(Device):
