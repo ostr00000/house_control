@@ -52,6 +52,7 @@ class HouseEventBuilder:
 
     def findDevice(self) -> HouseEventBuilder:
         cur = self.currentLocation if self.currentLocation else {}
+        self.deviceCandidatesDebug = {}  # DEBUG
 
         mostPossibleLoc = set(self.locationCandidates.keys())
         mostPossibleLoc.add(self.currentLocation)
@@ -59,12 +60,19 @@ class HouseEventBuilder:
             deep = loc.deep()
             isInCurLocation = loc in cur
             possibleLocation = self.locationCandidates.get(loc, 0)
+
             for device in loc.devices:
-                intersected = self.command.set.intersection(device.aliases)
+                command = self.command.set.difference(loc.aliases)
+                intersected = command.intersection(device.aliases)
                 if intersected:
-                    val = (+ 1 * deep + 10 * isInCurLocation + 100 * len(
-                        intersected) + 100 * possibleLocation)
+                    val = (
+                            + 1 * deep
+                            + 10 * isInCurLocation
+                            + 100 * possibleLocation
+                            + 1000 * len(intersected)
+                    )
                     self.deviceCandidates[device] = val
+                    self.deviceCandidatesDebug[device] = intersected
 
         return self
 

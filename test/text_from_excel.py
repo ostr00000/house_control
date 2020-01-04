@@ -64,6 +64,10 @@ class ResultCmp:
             f"{repr(event).ljust(30)} "
         )
 
+        if result not in expected:  # DEBUG
+            r = Recognizer(house)
+            event = r.recognizeOptionalEvent(command)
+
     def logSummary(self):
         logger.info(f"Non empty results {self.nonEmpty}/{self.total}")
         logger.info(f"Fully recognized command {self.fullyRecognizedCommand}/{self.total}")
@@ -71,8 +75,8 @@ class ResultCmp:
 
 def testFromXls():
     """
-    Non empty results: 195/214
-    Fully recognized command: 70/214
+    Non empty results: 189/214
+    Fully recognized command: 114/214
     """
     rec = Recognizer(house)
     cmp = ResultCmp()
