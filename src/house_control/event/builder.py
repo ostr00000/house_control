@@ -62,7 +62,8 @@ class HouseEventBuilder:
             for device in loc.devices:
                 intersected = self.command.set.intersection(device.aliases)
                 if intersected:
-                    val = (+ 1 * deep + 10 * isInCurLocation + 100 * len(intersected) + 100 * possibleLocation)
+                    val = (+ 1 * deep + 10 * isInCurLocation + 100 * len(
+                        intersected) + 100 * possibleLocation)
                     self.deviceCandidates[device] = val
 
         return self
@@ -76,21 +77,13 @@ class HouseEventBuilder:
         if self.typeCandidates:
             return max(self.typeCandidates, key=self.typeCandidates.get)
 
-        dev = None
-        if len(self.deviceCandidates) == 1:
-            dev = next(iter(self.deviceCandidates))
-
-        elif len(self.locationCandidates) == 1:
-            loc = next(iter(self.locationCandidates))
-            if len(loc.devices) == 1:
-                dev = loc.devices[0]
-
-        if dev and dev.defaultAction:
+        dev = self.extractDevice()
+        if dev.defaultAction:
             return dev.defaultAction
 
-        raise UnknownAction
+        raise UnknownAction(device=dev)
 
-    def extractDevice(self, eventType: Type[BaseHouseEvent]) -> Device:
+    def extractDevice(self, eventType: Type[BaseHouseEvent] = None) -> Device:
         if self.deviceCandidates:
             dev = {k: v for k, v in self.deviceCandidates.items() if eventType in k.actions}
             if not dev:
