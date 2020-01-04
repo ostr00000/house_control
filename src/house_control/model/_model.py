@@ -55,7 +55,9 @@ class Model:
 
     def updateDevices(self, *devices: Device):
         for dev in devices:
-            for newAliases in self.aliasesGenerator(dev.aliases):
+            names = set(dev.aliases)
+            names.add(dev.name)
+            for newAliases in self.aliasesGenerator(names):
                 dev.aliases.update(newAliases)
 
     def updateEvent(self, event: BaseHouseEvent):
