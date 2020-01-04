@@ -77,9 +77,7 @@ def testFromXls():
     rec = Recognizer(house)
     cmp = ResultCmp()
     gen = xlsTestGenerator()
-
-    headers = next(gen)
-    logger.info(':'.join(header.ljust(30) for header in headers))
+    _headers = next(gen)
 
     for command, symbol, alternativeSymbol in gen:
         event = rec.recognizeOptionalEvent(command)
