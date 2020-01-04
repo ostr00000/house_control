@@ -1,7 +1,7 @@
 import logging
-from functools import partial, partialmethod
+from functools import partialmethod
 from random import seed
-from typing import Iterator, Tuple, Callable
+from typing import Tuple, Callable, Union, Generator
 
 import xlrd
 
@@ -13,13 +13,15 @@ logger = logging.getLogger(__name__)
 seed(123)
 
 
-def xlsTestGenerator() -> Iterator[Tuple[str, str, str]]:
+def xlsTestGenerator() -> Generator[Union[Tuple[str, str, str], Tuple[str, str]], None, None]:
     XLS_FILE = 'dane-testowe.xls'
     workbook = xlrd.open_workbook(XLS_FILE)
     sheet = workbook.sheet_by_index(0)
 
-    for command, symbol, alternative in sheet.get_rows():
-        yield command.value, symbol.value, alternative.value
+    for commandCell, *symbolCells in sheet.get_rows():
+        symbolCells = symbolCells[:3]
+        ret = tuple(val for cell in symbolCells if (val := cell.value))
+        yield (commandCell.value,) + ret
 
 
 class Color:
@@ -59,7 +61,7 @@ class ResultCmp:
 
         color(
             f"Recognized: {str(event).ljust(22)} "
-            f"Expected: {expected[0].ljust(18)} "
+            f"Expected: {'|'.join(expected).ljust(18)} "
             f"Command: {command.ljust(40)} "
             f"{repr(event).ljust(30)} "
         )
@@ -83,8 +85,8 @@ def testFromXls():
     gen = xlsTestGenerator()
     _headers = next(gen)
 
-    for command, symbol, alternativeSymbol in gen:
+    for command, *symbols in gen:
         event = rec.recognizeOptionalEvent(command)
-        cmp.addResult(event, symbol, alternativeSymbol, command=command)
+        cmp.addResult(event, *symbols, command=command)
 
     cmp.logSummary()
