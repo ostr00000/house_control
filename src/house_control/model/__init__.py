@@ -1,6 +1,7 @@
 import logging
 import pickle
 import time
+from typing import Union, Iterable, Optional, Tuple
 
 from decorator import decorator
 
@@ -55,3 +56,12 @@ _model = _ModelWrapper('model.pickle')
 
 def getModel():
     return _model.model
+
+
+def convertToTuple(val: Union[str, Iterable[str], None]) -> Optional[Tuple[str, ...]]:
+    if isinstance(val, str):
+        return val,
+    elif val is None:
+        return None
+    else:
+        return tuple(val)

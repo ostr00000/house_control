@@ -64,12 +64,14 @@ class HouseEventBuilder:
             for device in loc.devices:
                 command = self.command.set.difference(loc.aliases)
                 intersected = command.intersection(device.aliases)
+                requirementMeet = device.isRequirementMeet(cmd=self.command)
                 if intersected:
                     val = (
                             + 1 * deep
                             + 10 * isInCurLocation
                             + 100 * possibleLocation
                             + 1000 * len(intersected)
+                            + 10000 * requirementMeet
                     )
                     self.deviceCandidates[device] = val
                     self.deviceCandidatesDebug[device] = intersected
