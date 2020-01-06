@@ -46,18 +46,18 @@ class ResultCmp:
         self.fullyRecognizedCommand = 0
 
     def addResult(self, event: BaseHouseEvent, *expected: str, command):
-        if event is None:
-            result = 'error'
-            color = Color.red
-        else:
-            result = str(event)
-            self.nonEmpty += 1
-            color = Color.magenta
+        result = 'error' if event is None else str(event)
 
         self.total += 1
         if result in expected:
+            self.nonEmpty += 1
             self.fullyRecognizedCommand += 1
             color: Callable = Color.green
+        elif event is not None:
+            self.nonEmpty += 1
+            color = Color.magenta
+        else:
+            color = Color.red
 
         color(
             f"Recognized: {str(event).ljust(22)} "
