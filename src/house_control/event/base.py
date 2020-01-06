@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from itertools import islice
 from typing import TYPE_CHECKING, Iterable, Tuple, Union, Set, ItemsView
 
+from house_control.exceptions import RecogniseException
+
 if TYPE_CHECKING:
     from house_control.model.device import Device
     from house_control.model.command import Command
@@ -45,8 +47,18 @@ class BaseHouseEvent(ABC):
     aliases: AliasSet
 
     def __init__(self, device: Device, command: Command):
+        """Raise exception if color is invalid"""
         self.device = device
         self.command = command
+        self.__str__()  # test exception
+
+    @classmethod
+    def checkIfValid(cls, command: Command):
+        try:
+            str(cls('check', command))
+        except RecogniseException:
+            return False
+        return True
 
     def __repr__(self):
         return f"{type(self).__name__} for device '{repr(self.device)}'"

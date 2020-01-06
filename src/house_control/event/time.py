@@ -7,11 +7,6 @@ from house_control.model.numbers import scanNumberGen
 class TimeEvent(BaseHouseEvent):
     aliases = AliasSet('ustaw')
 
-    def __init__(self, *args):
-        """Raise exception if time is invalid"""
-        super().__init__(*args)
-        self.getTime()
-
     def __str__(self):
         return f"set {self.device} time {self.getTime()}"
 
