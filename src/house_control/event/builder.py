@@ -87,7 +87,7 @@ class HouseEventBuilder:
         if self.typeCandidates:
             possibleTypes = set(chain(*(dev.actions for dev in self.deviceCandidates.keys())))
             validTypeCandidates = {tc: val for tc, val in self.typeCandidates.items()
-                                   if tc in possibleTypes}
+                                   if tc in possibleTypes and tc.checkIfValid(self.command)}
             if validTypeCandidates:
                 if len(validTypeCandidates) == 1:
                     return next(iter(validTypeCandidates.keys()))
@@ -109,9 +109,9 @@ class HouseEventBuilder:
                 dev = self.deviceCandidates
 
             if len(dev) == 1:
-                return list(self.deviceCandidates.keys())[0]
+                return list(dev.keys())[0]
 
-            maxValues = multiMax(self.deviceCandidates, key=self.deviceCandidates.get)
+            maxValues = multiMax(dev, key=dev.get)
             if len(maxValues) == 1:
                 return maxValues[0]
 

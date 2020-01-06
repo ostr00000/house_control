@@ -80,8 +80,8 @@ lamps = [
     Light('oświetlenie górne', curLoc),
     BrightnessLight('oświetlenie nad szafkami', curLoc),
     Light('oświetlenie pod szafkami', curLoc),
-    Light('oświetlenie okapu', curLoc),
+    Light('oświetlenie okapu', curLoc, requiredNames='oświetlenie'),
 ]
-SpeedFan('okap', curLoc)
-Fan('wentylator', curLoc)
+SpeedFan('okap', curLoc, requiredNames=('okap', '!oświetlenie'))
+Fan('wentylator', curLoc, requiredNames='!okap')
 Light('całe oświetlenie w kuchni', curLoc, aggr=lamps)

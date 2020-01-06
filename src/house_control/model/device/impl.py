@@ -60,6 +60,7 @@ class Fan(SwitchDevice):
 
 class SpeedFan(Fan):
     def initActions(self):
+        super().initActions()
         self.actions.append(SpeedEvent)
 
 

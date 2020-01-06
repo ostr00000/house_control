@@ -16,7 +16,7 @@ class Recognizer:
         """Send speak to external service"""
         raise NotImplementedError
 
-    def recognizeEvent(self, command: Union[str, Command], raiseException=False) -> BaseHouseEvent:
+    def recognizeEvent(self, command: Union[str, Command]) -> BaseHouseEvent:
         if not isinstance(command, Command):
             if isinstance(command, str):
                 command = Command(command)

@@ -48,7 +48,7 @@ def scanNumberGen(textList: List[str]) -> Iterator[int]:
             except ValueError:
                 if ':' in maybeNumber:
                     yield from scanSplitByChar(maybeNumber, ':')
-                elif '%' in maybeNumber:
+                elif '%' in maybeNumber and maybeNumber != '%':
                     yield from scanSplitByChar(maybeNumber, '%')
                 else:
                     logger.error(f'Unknown base form for {maybeNumber}')
