@@ -63,9 +63,8 @@ class SpeedFan(Fan):
         self.actions.append(SpeedEvent)
 
 
-class Blower(Device):
-    def initActions(self):
-        self.actions.append(SwitchEvent)
+class Blower(SwitchDevice):
+    pass
 
 
 class Radio(SwitchDevice):

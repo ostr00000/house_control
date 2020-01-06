@@ -1,7 +1,7 @@
-from typing import Iterator, Optional, List
+import logging
+from typing import Iterator, List
 
 from house_control.model import getModel
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,21 @@ def findNumber(textList: List[str]):
     return total
 
 
-def scanNumberGen(textList: List[str]) -> Iterator[Optional[int]]:
+def scanSplitByChar(joinedNumbers: str, splitChar=':') -> Iterator[int]:
+    ok = False
+    for maybeNumber in joinedNumbers.split(splitChar):
+        try:
+            number = int(maybeNumber)
+        except ValueError:
+            continue
+        ok = True
+        yield number
+
+    if not ok:
+        logger.warning(f"Not found any number in {joinedNumbers}")
+
+
+def scanNumberGen(textList: List[str]) -> Iterator[int]:
     model = getModel()
     for maybeNumber in textList:
         try:
@@ -32,7 +46,12 @@ def scanNumberGen(textList: List[str]) -> Iterator[Optional[int]]:
             try:
                 number = int(maybeNumber)
             except ValueError:
-                logger.error(f'Unknown base form for {maybeNumber}')
+                if ':' in maybeNumber:
+                    yield from scanSplitByChar(maybeNumber, ':')
+                elif '%' in maybeNumber:
+                    yield from scanSplitByChar(maybeNumber, '%')
+                else:
+                    logger.error(f'Unknown base form for {maybeNumber}')
             else:
                 yield number
             continue

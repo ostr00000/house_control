@@ -55,7 +55,7 @@ class HouseEventBuilder:
         self.deviceCandidatesDebug = {}  # DEBUG
 
         mostPossibleLoc = set(self.locationCandidates.keys())
-        mostPossibleLoc.add(self.currentLocation)
+        mostPossibleLoc.update(iter(cur))
         for loc in mostPossibleLoc:
             deep = loc.deep()
             isInCurLocation = loc in cur

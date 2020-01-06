@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from itertools import islice
-from typing import TYPE_CHECKING, Iterable, Tuple, Union, Iterator, Set, ItemsView
+from typing import TYPE_CHECKING, Iterable, Tuple, Union, Set, ItemsView
 
 if TYPE_CHECKING:
     from house_control.model.device import Device
