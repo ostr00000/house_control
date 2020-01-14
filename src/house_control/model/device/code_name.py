@@ -1,3 +1,8 @@
+"""
+Generator code symbols for devices.
+Generation is global for all devices.
+"""
+
 letter = 'A'
 number = 0
 

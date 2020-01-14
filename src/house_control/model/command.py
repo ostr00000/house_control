@@ -1,4 +1,5 @@
 class Command:
+    """Wrapper object for string command"""
     def __init__(self, commandText: str):
         self.sequence = commandText.lower().split()
         self.set = set(filter(lambda x: len(x) > 2 and '%' not in x, self.sequence))

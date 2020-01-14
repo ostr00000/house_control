@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def findNumber(textList: List[str]):
+    """Search one number in text."""
     total = None
     for val in scanNumberGen(textList):
         if val is None:
@@ -24,6 +25,7 @@ def findNumber(textList: List[str]):
 
 
 def scanSplitByChar(joinedNumbers: str, splitChar=':') -> Iterator[int]:
+    """Function search numbers in split string"""
     ok = False
     for maybeNumber in joinedNumbers.split(splitChar):
         try:
@@ -38,6 +40,7 @@ def scanSplitByChar(joinedNumbers: str, splitChar=':') -> Iterator[int]:
 
 
 def scanNumberGen(textList: List[str]) -> Iterator[int]:
+    """Generator for searching multiple numbers"""
     model = getModel()
     for maybeNumber in textList:
         try:

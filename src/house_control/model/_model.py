@@ -14,6 +14,13 @@ logger = logging.getLogger(__name__)
 
 
 class Model:
+    """
+    Load previously prepared data from file.
+    Can update aliases for location, devices and actions.
+    Data format:
+        - each line has words separated by ','
+        - each line group 'aliases' for first word in that line
+    """
 
     def __init__(self):
         self.wordsDict: Dict[str, str] = {}

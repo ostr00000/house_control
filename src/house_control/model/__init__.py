@@ -19,6 +19,11 @@ def timeDec(fun, *args, **kwargs):
 
 
 class _ModelWrapper:
+    """
+    Wrapper for model class.
+    Main goal is to speed up loading model.
+    """
+
     def __init__(self, fileName: str):
         self.fileName = fileName
         self._model = None

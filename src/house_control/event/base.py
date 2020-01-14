@@ -12,9 +12,19 @@ if TYPE_CHECKING:
 
 
 class AliasSet(set):
-    """Each argument create new group"""
+    """
+    Object can have multiple subsets.
+    This mechanism allow to check if a word belongs to any of categories,
+    and later to check each categories separably.
+    Each of words can update its alias individually.
+    """
 
     def __init__(self, *mainWords: Union[str, Tuple[str, ...]]):
+        """
+        Each argument create new group
+        ex. 3 groups and the second group has 2 words:
+            AliasSet('ala', ('ma', 'posiada'), 'kota')
+        """
         super().__init__()
         self._data = {}
         for mainWord in mainWords:
@@ -43,6 +53,12 @@ class AliasSet(set):
 
 
 class BaseHouseEvent(ABC):
+    """
+    Base class for all events.
+    Due to search by __subclasses__ in initialization from model,
+    all event must inherit from this class.
+    """
+
     name = ''
     aliases: AliasSet
 
@@ -54,18 +70,27 @@ class BaseHouseEvent(ABC):
 
     @classmethod
     def checkIfValid(cls, command: Command):
+        """
+        Check if command can be recognized as event.
+        If return False event is excluded from possible solution.
+        It is useful when command must contain certain words.
+        """
         try:
+            # noinspection PyTypeChecker
             str(cls('check', command))
         except RecogniseException:
             return False
         return True
 
     def __repr__(self):
+        """This function return readable information about device"""
         return f"{type(self).__name__} for device '{repr(self.device)}'"
 
     @abstractmethod
     def __str__(self):
+        """This function return symbolic code of action with device. It is used in tests."""
         raise NotImplementedError
 
     def isInGroup(self, groupNumber: int):
+        """Check if command belongs to groupNumber"""
         return any(elem in self.command.set for elem in self.aliases.getGroup(groupNumber))

@@ -10,7 +10,7 @@ def main():
     rec = Recognizer(house)
     try:
         event = rec.recognizeEvent('włącz światło w kuchni')
-        print(event)
+        print(event.__repr__())
     except RecogniseException as exc:
         print(exc)
 

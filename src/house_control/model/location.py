@@ -11,6 +11,11 @@ if TYPE_CHECKING:
 
 @dataclass
 class Loc:
+    """
+    Object represent logical position.
+    Can contains other locations and devices.
+    Location has name, but it is possible to assign many aliases.
+    """
     name: str
     aliases: Set[str] = field(default_factory=set)
     parent: Loc = None

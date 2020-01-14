@@ -15,6 +15,13 @@ logger = logging.getLogger(__name__)
 
 
 class Device:
+    """
+    Representation of device in specific location.
+    Device can use aliases.
+    Device start default action.
+    It is possible to create special aggregation device containing other devices -
+    but all devices must have same interface.
+    """
     def __init__(self, name: str,
                  loc: Loc,
                  *aliases: Iterable[str],
@@ -22,8 +29,15 @@ class Device:
                  defaultAction: Type[BaseHouseEvent] = None,
                  aggr: Iterable[Device] = None,
                  codeName: str = None,
-                 requiredNames: Union[Iterable[str]] = None,
+                 requiredNames: Union[str, Iterable[str]] = None,
                  ):
+        """
+        :param requiredNames: define words that must (or must not) be present in command
+            All required names must be present.
+            To define word that cannot be present use '!' ex.:
+                ('ala', '!kot')
+        """
+
         self.name = name
         self.loc = loc
         self.defaultAction = defaultAction

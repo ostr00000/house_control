@@ -17,6 +17,7 @@ class Recognizer:
         raise NotImplementedError
 
     def recognizeEvent(self, command: Union[str, Command]) -> BaseHouseEvent:
+        """Recognize event from text"""
         if not isinstance(command, Command):
             if isinstance(command, str):
                 command = Command(command)

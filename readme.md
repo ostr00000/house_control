@@ -2,6 +2,7 @@
 # Preparation
 
 ### Git repository
+Wymagany jest plik zawierający pogrupowane słowa.
 ```shell script
 git submodule init
 git submodule update

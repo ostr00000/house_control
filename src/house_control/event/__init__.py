@@ -1,3 +1,7 @@
+"""
+This package load all modules from its directory,
+then initialize events' aliases from model object.
+"""
 import pkgutil
 
 from house_control.event.base import BaseHouseEvent
