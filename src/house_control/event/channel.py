@@ -13,10 +13,7 @@ class ChannelEvent(BaseHouseEvent):
         if channel is not None:
             return f'set {self.device} ch {channel}'
 
-        return f"{'ch_next' if self.isNext() else 'ch_prev'} {self.device}"
+        return f"{'ch_next' if self.isInGroup(2) else 'ch_prev'} {self.device}"
 
     def getChannel(self) -> Optional[int]:
         return findNumber(self.command.sequence)
-
-    def isNext(self):
-        pass

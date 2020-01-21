@@ -1,6 +1,5 @@
 import logging
 from functools import partialmethod
-from random import seed
 from typing import Tuple, Callable, Union, Generator
 
 import xlrd
@@ -10,7 +9,6 @@ from house_control.house_configuration import house
 from house_control.recognizer import Recognizer
 
 logger = logging.getLogger(__name__)
-seed(123)
 
 
 def xlsTestGenerator() -> Generator[Union[Tuple[str, str, str], Tuple[str, str]], None, None]:
@@ -77,8 +75,9 @@ class ResultCmp:
 
 def testFromXls():
     """
-    Non empty results: 189/214
-    Fully recognized command: 114/214
+    Non empty results: 214/214
+    Fully recognized command: 214/214
+    Some expected data are changed in xls.
     """
     rec = Recognizer(house)
     cmp = ResultCmp()

@@ -39,10 +39,10 @@ class Model:
                     continue
 
                 for word in words:
-                    # too many words
                     # if word in self.wordsDict:
                     #     logger.warning(f"Word '{word}' already exist in dictionary - "
-                    #                    f"overriding its base word to '{baseWord}'")
+                    #                    f"overriding its base word from '{self.wordsDict[word]}' "
+                    #                    f"to '{baseWord}'")
 
                     self.wordsDict[word] = baseWord
 
