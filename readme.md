@@ -1,4 +1,15 @@
 
+# Spis treści
+- [Cel projektu](#cel-projektu)
+- [Opis dzialania](#opis-dzialania)
+    + [Opis lokalizacji](#opis-lokalizacji)
+    + [Opis urzadzen](#opis-urzadzen)
+    + [Opis akcji](#opis-akcji)
+- [Diagram klas](#diagram-klas)
+- [Przygotowanie programu](#przygotowanie)
+    + [Git repository](#git-repository)
+    + [Python environment](#python-environment)
+
 # Cel projektu
 Projekt ma dostarczyć narzędzie do obsługi urządzeń w domu za pomocą 
 wypowiadanych poleceń. Celem jest przetworzenie tekstu na odpowiadającą mu
@@ -24,11 +35,55 @@ Komenda do przetworzenia jest analizowana w następujący sposób:
         - gdy jest jedno urządzenie, jest ono wybierane
         - filtrowane są urządzenia mające możliwą akcje, jeśli jest tylko jedno takie, jest ono wybierane    
     
-## Opis lokalizacji
-## Opis urzadzen
-## Opis akcji
+### Opis lokalizacji
+Jest określana za pomocą nazwy, mogą być użyte alternatywne określenia.
+Lokalizacja może zawierać podrzędne lokalizacje oraz urządzenia w danej lokalizacji.
 
-# Przygotowanie
+
+### Opis urzadzen
+Jest określane za pomocą nazwy, mogą być użyte alternatywne określenia.
+Urządzenie Musi zawierać listę akcji jakie może wykonać.
+Może mieć przypisaną domyślną akcję np. przełącz (on->off, off->on).
+Może agregować podrzędne urządzenia - wymagane jest by agregowane urządzenia posiadały ten sam typ.
+
+W celu odróżnienia np. `lampa` od `lampa lewa` można ustawić dodatkowe 
+flagi określający wymagany wyraz albo wyraz który nie może się pojawić.
+Zamiast jednego słowa można podać listę takich słów. Słowo które nie może się pojawić
+konfiguruje się przez dodanie na początku znaku `!`.
+Dla powyższego przykładu należy ustawić odpowiednio `lewa` oraz `!lewa` 
+
+Rozszerzenie urządzeń polega na dziedziczeniu z klasy bazowej `Device`
+i ustawieniu odpowiednich wartości w metodach inicjujących np.:
+```
+class AlarClock(Device):
+    def initActions(self):
+        super().initActions()
+        self.actions.append(SwitchEvent)
+        self.actions.append(TimeEvent)
+        self.defaultAction = SwitchEvent
+
+    def initAliases(self):
+        super().initAliases()
+        self.aliases.add('budzik')
+        self.aliases.add('budzenie')
+``` 
+### Opis akcji
+Akcje posiadają specjalny zbiór słów, dzięki którym akcja jest rozpoznawana. 
+Zbiory te mogą być podzielone na mniejsze grupy, dzięki temu możliwe jest 
+rozpoznanie odpowiednich parametrów.
+Np. klasa obsługująca zmianę kanału, może pozyskać dodatkowe informacje 
+zależnie od rozpoznanej grupy:
+```
+class ChannelEvent(BaseHouseEvent):
+    aliases = AliasSet('kanał', 'poprzedni', 'następny')
+```
+Rozszerzanie akcji polega na dodaniu do modułu event nowej akcji. 
+Akcje te są ładowane dynamicznie. 
+
+# Diagram klas
+![diagram](docs/class_relations_diagram.png)
+
+# Przygotowanie programu
 
 ### Git repository
 Wymagany jest plik zawierający pogrupowane słowa.
@@ -45,5 +100,3 @@ source ./house_control_env/bin/activate
 pip install -r requirements.txt
 ```
 
-### Class relations
-![diagram](docs/class_relations_diagram.png)
